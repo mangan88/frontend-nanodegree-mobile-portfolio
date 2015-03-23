@@ -450,10 +450,14 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+  	//pizzaLength created so we don't have to access DOM every iteration
+  	//move dx and newwidth outside the loop, since all have the same width anyway.
+  	//use getElementsByClassName...more efficient than querySelectorAll
+  	var pizzaLength = document.getElementsByClassName("randomPizzaContainer").length;
+  	var dx = determineDx(document.querySelector(".randomPizzaContainer"), size);
+    var newwidth = (document.querySelector(".randomPizzaContainer").offsetWidth + dx) + 'px';
+    for (var i = 0; i < pizzaLength; i++) {
+      document.getElementsByClassName("randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -501,11 +505,13 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+  //getElementsByClassName for efficiency over querySelectorAll
+  var items = document.getElementsByClassName('mover');
+  //Find the scrollTop once, instead of every iteration
+  var cachedScrollTop=document.body.scrollTop;
+  for (var i = 0; i < items.length; i++) {    
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -516,6 +522,8 @@ function updatePositions() {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
+  
+  
 }
 
 // runs updatePositions on scroll
@@ -525,7 +533,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 40; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
