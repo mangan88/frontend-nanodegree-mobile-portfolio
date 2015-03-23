@@ -1,0 +1,3 @@
+For this project, I made heavy use of the documentation at Mozilla's MDN (https://developer.mozilla.org/en-US/), notably DOM access (for example, https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName?redirectlocale=en-US&redirectslug=DOM%2Fdocument.getElementsByClassName)
+
+I also used the Office Hours information posted at https://github.com/udacity/fend-office-hours/tree/master/Web%20Optimization/Effective%20Optimizations%20for%2060%20FPS.
